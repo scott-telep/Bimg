@@ -175,9 +175,9 @@ export const generateImagesLinks = async (prompt: string) => {
   return imageLinks;
 };
 
-export const generateImageFiles = async (prompt: string) => {
+export const generateImageFiles = async (prompt: string, outputDir: string) => {
   const authCookie = Config.bingImageCookie;
-  const outputDir = `${Config.tempDir}/${prompt}`;
+  // const outputDir = `${Config.tempDir}/${prompt}`;
 
   if (!authCookie || !prompt) {
     throw new Error("Missing parameters");
@@ -190,12 +190,12 @@ export const generateImageFiles = async (prompt: string) => {
 
   // Read saved images from the output directory
   const imageFiles = fs.readdirSync(outputDir);
-  const images = imageFiles.map((filename) => {
+  const images = imageFiles.filter((filename) => !filename.startsWith('.')).map((filename) => {
     const filePath = path.join(outputDir, filename);
-    const fileData = fs.readFileSync(filePath);
+    // const fileData = fs.readFileSync(filePath);
     return {
-      filename,
-      data: fileData.toString("base64"),
+      filePath,
+      // data: fileData.toString("base64"),
     };
   });
 
